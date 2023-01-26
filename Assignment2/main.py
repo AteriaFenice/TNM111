@@ -17,8 +17,8 @@ from tkinter import *
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv")
 
-data = data1.to_numpy() # From csv to array
-print(data)
+data = data1.to_numpy()# From csv to array
+#print(data)
 
 #print(data1)
 #print('\n')
@@ -47,8 +47,17 @@ offsetY = winY / 2
 canvas.create_line(offsetX,minXY[1]+offsetX,offsetY,maxXY[1]+offsetY, fill = "green", width=2)
 canvas.create_line(minXY[0]+offsetX,offsetX,maxXY[0]+offsetY,offsetY, fill = "green", width=2)
 
-canvas.create_oval((data[2][0])+offsetX,(data[2][1])+offsetY, (data[2][0])+offsetX,(data[2][1])+offsetY,fill='blue', width=4)
-canvas.create_oval((data[3][0])+offsetX,(data[3][1])+offsetY, (data[3][0])+offsetX,(data[3][1])+offsetY,fill='blue', width=4)
+# [row][column]
+# Test
+#canvas.create_oval((data[2][0])+offsetX,(data[2][1])+offsetY, (data[2][0])+offsetX,(data[2][1])+offsetY,fill='blue', width=4)
+#canvas.create_oval((data[3][0])+offsetX,(data[3][1])+offsetY, (data[3][0])+offsetX,(data[3][1])+offsetY,fill='blue', width=4)
+
+# Prints all dots 
+i = 0
+while (i < len(data)):
+    canvas.create_oval((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,fill='blue', width=4)
+    i = i+1
+    print(i)
 
 win.mainloop()
 
