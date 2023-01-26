@@ -4,6 +4,7 @@
 
 # Import libraries 
 import pandas as pd
+import numpy as np
 from tkinter import *
 
 # Implemenatation
@@ -16,8 +17,11 @@ from tkinter import *
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv")
 
-print(data1)
-print('\n')
+data = data1.to_numpy() # From csv to array
+print(data)
+
+#print(data1)
+#print('\n')
 #print(data2)
 # get max and min value of column x and y
 maxXY = data1.max()
@@ -42,6 +46,9 @@ offsetX = winX / 2
 offsetY = winY / 2
 canvas.create_line(offsetX,minXY[1]+offsetX,offsetY,maxXY[1]+offsetY, fill = "green", width=2)
 canvas.create_line(minXY[0]+offsetX,offsetX,maxXY[0]+offsetY,offsetY, fill = "green", width=2)
+
+canvas.create_oval((data[2][0])+offsetX,(data[2][1])+offsetY, (data[2][0])+offsetX,(data[2][1])+offsetY,fill='blue', width=4)
+canvas.create_oval((data[3][0])+offsetX,(data[3][1])+offsetY, (data[3][0])+offsetX,(data[3][1])+offsetY,fill='blue', width=4)
 
 win.mainloop()
 
