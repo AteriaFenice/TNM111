@@ -53,14 +53,14 @@ canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
 # ticks
 for i in range(minXY[0], maxXY[0]):
     if(i%10 == 0 and i != 0): # ticks in interwall of 10
-        canvas.create_line(scale*i+offsetX, -2+offsetY, scale*i+offsetX, 2+offsetY, fill = "black", width=1)
+        canvas.create_line(scale*i+offsetX, -3+offsetY, scale*i+offsetX, 3+offsetY, fill = "black", width=1)
         tick = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center", width=20)
 
 
 for i in range(minXY[1], maxXY[1]):
     if(i%10 == 0 and i != 0):
-        canvas.create_line(-2+offsetX, scale*i+offsetY, 2+offsetX, scale*i+offsetY, fill = "black", width=1)
-        tick = Label(win, text=str(i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center", width=20)
+        canvas.create_line(-3+offsetX, scale*i+offsetY, 3+offsetX, scale*i+offsetY, fill = "black", width=1)
+        tick = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center", width=20)
 
 
 # [row][column]
