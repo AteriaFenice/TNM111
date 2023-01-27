@@ -4,7 +4,9 @@
 
 # Import libraries 
 import pandas as pd
+import numpy as np
 from tkinter import *
+from collections import Counter
 
 # Implemenatation
 # Draw the x- and y-axis, together with ticks and tick values
@@ -14,10 +16,13 @@ from tkinter import *
 # Set the value range automatically based on the data vlaues presnet in the data set 
 
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
-data2 = pd.read_csv("data2.csv")
+data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
-print(data1)
-print('\n')
+data = data1.to_numpy()# From csv to array
+#print(data2)
+
+#print(data1)
+#print('\n')
 #print(data2)
 # get max and min value of column x and y
 maxXY = data1.max()
@@ -58,8 +63,37 @@ for i in range(minXY[1], maxXY[1]):
         tick = Label(win, text=str(i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center", width=20)
 
 
-win.mainloop()
+# [row][column]
+# Test
+#canvas.create_oval((data[2][0])+offsetX,(data[2][1])+offsetY, (data[2][0])+offsetX,(data[2][1])+offsetY,fill='blue', width=4)
+#canvas.create_oval((data[3][0])+offsetX,(data[3][1])+offsetY, (data[3][0])+offsetX,(data[3][1])+offsetY,fill='blue', width=4)
 
+# Prints all dots 
+i = 0
+group = Counter(data1['group'])
+# Gets the group types to compare them later to the dataset to draw the shapes
+group_type = list(set(data1['group'])) 
+#group_type2 = list(set(data2['group']))
+#print(group_type2)
+
+
+while (i < len(data)):
+
+    # Circle
+    if(data[i][2] == group_type[1]):
+        canvas.create_oval((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,fill='blue', width=4)
+
+    if (data[i][2] == group_type[2]):
+    # Square
+        canvas.create_rectangle((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,fill='blue', width=4)
+
+    # Half circle(?)
+    else:
+        canvas.create_arc((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,start= 0, extent = -180, fill='blue', width=4, style='chord')
+
+    i = i+1
+
+win.mainloop()
 
 #df = pd.DataFrame(data1,columns = ['x','y','group'])
 #ax1 = df.plot.scatter(x='x',y='y',c='DarkBlue')
