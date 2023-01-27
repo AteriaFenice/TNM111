@@ -15,6 +15,10 @@ from collections import Counter
 # Display the data points correctly with respect to the axes
 # Set the value range automatically based on the data vlaues presnet in the data set 
 
+def draw_circle(x0,y0,x1,y1):
+    legend.create_oval(x0,y0,x1,y1,fill='blue')
+
+
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
@@ -35,11 +39,11 @@ win=Tk()
 scale = 5 # otherwise window is too small
 winX = scale * (maxXY[0]+abs(minXY[0])) + 50 # dynamically changed based on database
 winY = scale * (maxXY[1]+abs(maxXY[1])) + 50
-win.geometry(str(winX) + "x" + str(winY)) # set size of window
+win.geometry(str(winX+150) + "x" + str(winY)) # set size of window
 
 # Create a canvas widget
-canvas = Canvas(win, width=500, height=300)
-canvas.pack(fill="both", expand=True)
+canvas = Canvas(win, width=winX, height=winY)
+#canvas.pack(fill="both", expand=True)
 
 # Add a line in canvas widget
 offsetX = winX / 2 # to get origin in center of window
@@ -70,11 +74,9 @@ for i in range(minXY[1], maxXY[1]):
 
 # Prints all dots 
 i = 0
-group_amount = Counter(data1['group']) # Count how many of each type
 group_type = np.sort(list(set(data1['group']))) # Gets the group types, sorted
 #group_type2 = list(set(data2['group']))
 print('groups: ', group_type)
-print('how many of each group: ', group_amount)
 size = 3 # Size of the points in the plot
 
 while (i < len(data)):
@@ -91,10 +93,38 @@ while (i < len(data)):
     if(data[i][2] == group_type[2]):
         canvas.create_polygon((data[i][0])*scale+offsetX-size, (data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, (data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, (data[i][1])*scale+offsetY+size, fill='blue')
 
-
     i = i+1
 
+legend = Canvas(win, width=50, height=100)
+
+print(len(group_type))
+
+group_amount = np.sort(list(Counter(data1['group']).values())) # Count how many of each type
+print('how many of each group: ', group_amount)
+
+i = 0
+nextlineSpace = 20
+text_legend = ""
+
+shapes = [legend.create_oval(10,10+(nextlineSpace*(i+1)),10+size,10+(nextlineSpace*(i+1))+size,fill='blue'),
+    legend.create_oval(10,10+(nextlineSpace*(i+1)),10+size,10+(nextlineSpace*(i+1))+size,fill='blue'),
+    legend.create_oval(10,10+(nextlineSpace*(i+1)),10+size,10+(nextlineSpace*(i+1))+size,fill='blue'),
+    ]
+
+print(group_type[0] + ": " + str(group_amount[0]))
+
+while i < len(group_type):
+     shapes[i]
+     text_legend = group_type[i] + ": " + str(group_amount[i])
+     legend.create_text(30,10+(nextlineSpace*(i+1)),text=text_legend)
+     i = i+1
+
+canvas.grid(row=0,column=0)
+legend.grid(row=0,column=1)
+
+
 win.mainloop()
+
 
 #df = pd.DataFrame(data1,columns = ['x','y','group'])
 #ax1 = df.plot.scatter(x='x',y='y',c='DarkBlue')
