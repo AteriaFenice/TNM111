@@ -19,7 +19,7 @@ data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
 data = data1.to_numpy()# From csv to array
-#print(data2)
+print(data1)
 
 #print(data1)
 #print('\n')
@@ -65,31 +65,32 @@ for i in range(minXY[1], maxXY[1]):
 
 # [row][column]
 # Test
-#canvas.create_oval((data[2][0])+offsetX,(data[2][1])+offsetY, (data[2][0])+offsetX,(data[2][1])+offsetY,fill='blue', width=4)
-#canvas.create_oval((data[3][0])+offsetX,(data[3][1])+offsetY, (data[3][0])+offsetX,(data[3][1])+offsetY,fill='blue', width=4)
+#canvas.create_oval((data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY, (data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY,fill='blue', width=4)
+#canvas.create_oval((data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY, (data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY,fill='blue', width=4)
 
 # Prints all dots 
 i = 0
-group = Counter(data1['group'])
-# Gets the group types to compare them later to the dataset to draw the shapes
-group_type = list(set(data1['group'])) 
+group_amount = Counter(data1['group']) # Count how many of each type
+group_type = np.sort(list(set(data1['group']))) # Gets the group types, sorted
 #group_type2 = list(set(data2['group']))
-print(group_type)
-
+print('groups: ', group_type)
+print('how many of each group: ', group_amount)
+size = 3 # Size of the points in the plot
 
 while (i < len(data)):
 
-    # Circle
-    if(data[i][2] == group_type[1]):
-        canvas.create_oval((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,fill='blue', width=4)
+    # Prints the first group as circles
+    if(data[i][2] == group_type[0]):
+        canvas.create_oval((data[i][0])*scale+offsetX-size,(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size,(data[i][1])*scale+offsetY-size,fill='blue')
 
-    if (data[i][2] == group_type[2]):
-    # Square
-        canvas.create_rectangle((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,fill='blue', width=4)
+    # Prints the first group as squares
+    if (data[i][2] == group_type[1]):
+        canvas.create_rectangle((data[i][0])*scale+offsetX-size,(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size,(data[i][1])*scale+offsetY-size,fill='blue')
 
-    # Half circle(?)
-    else:
-        canvas.create_arc((data[i][0])+offsetX,(data[i][1])+offsetY, (data[i][0])+offsetX,(data[i][1])+offsetY,start= 0, extent = -180, fill='blue', width=4, style='chord')
+    # Prints the first group as triangles
+    if(data[i][2] == group_type[2]):
+        canvas.create_polygon((data[i][0])*scale+offsetX-size, (data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, (data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, (data[i][1])*scale+offsetY+size, fill='blue')
+
 
     i = i+1
 
@@ -97,7 +98,7 @@ while (i < len(data)):
 # LEGEND - lite skev, borde visa formerna
 i=0
 while (i < len(group_type)):
-    shape = ['arc', 'oval', 'rectangle']
+    shape = ['oval', 'rectangle', 'triangle']
 
     leg = Label(win, text=str(shape[i])+" = "+str(group_type[i])).place(relx=0.95, rely=0.0+0.05*i, anchor="ne")
 
