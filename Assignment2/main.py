@@ -33,7 +33,7 @@ win=Tk()
 
 # Set the size of the tkinter window 
 scale = 5 # otherwise window is too small
-winX = scale * (maxXY[0]+abs(minXY[0])) + 50 # dynamically changed based on database
+winX = scale * (maxXY[0]+abs(minXY[0])) + 200 # dynamically changed based on database
 winY = scale * (maxXY[1]+abs(maxXY[1])) + 50
 win.geometry(str(winX) + "x" + str(winY)) # set size of window
 
@@ -42,7 +42,7 @@ canvas = Canvas(win, width=500, height=300)
 canvas.pack(fill="both", expand=True)
 
 # Add a line in canvas widget
-offsetX = winX / 2 # to get origin in center of window
+offsetX = (winX-100) / 2 # to get origin in center of window
 offsetY = winY / 2
 yAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of y-axis
 xAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of x-axis
@@ -74,7 +74,7 @@ group = Counter(data1['group'])
 # Gets the group types to compare them later to the dataset to draw the shapes
 group_type = list(set(data1['group'])) 
 #group_type2 = list(set(data2['group']))
-#print(group_type2)
+print(group_type)
 
 
 while (i < len(data)):
@@ -93,9 +93,21 @@ while (i < len(data)):
 
     i = i+1
 
+
+# LEGEND - lite skev, borde visa formerna
+i=0
+while (i < len(group_type)):
+    shape = ['arc', 'oval', 'rectangle']
+
+    leg = Label(win, text=str(shape[i])+" = "+str(group_type[i])).place(relx=0.95, rely=0.0+0.05*i, anchor="ne")
+
+    i = i+1
+
+
 win.mainloop()
 
 #df = pd.DataFrame(data1,columns = ['x','y','group'])
 #ax1 = df.plot.scatter(x='x',y='y',c='DarkBlue')
 
 #print(df)
+
