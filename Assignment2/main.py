@@ -44,8 +44,8 @@ canvas.pack(fill="both", expand=True)
 # Add a line in canvas widget
 offsetX = winX / 2 # to get origin in center of window
 offsetY = winY / 2
-yAxis = scale*minXY[0]+offsetX,offsetX,scale*maxXY[0]+offsetY,offsetY # points of y-axis
-xAxis = offsetX,scale*minXY[1]+offsetX,offsetY,scale*maxXY[1]+offsetY # points of x-axis
+yAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of y-axis
+xAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of x-axis
 
 canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
