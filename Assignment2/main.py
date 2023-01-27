@@ -22,26 +22,41 @@ print('\n')
 # get max and min value of column x and y
 maxXY = data1.max()
 minXY = data1.min()
-print(minXY[1])
 
 # Create an instance of tkinter frame or window
 win=Tk()
 
 # Set the size of the tkinter window 
-winX = maxXY[0]+abs(minXY[0]) + 50
-winY = maxXY[1]+abs(maxXY[1]) + 50
-win.geometry(str(winX) + "x" + str(winY))
+scale = 5 # otherwise window is too small
+winX = scale * (maxXY[0]+abs(minXY[0])) + 50 # dynamically changed based on database
+winY = scale * (maxXY[1]+abs(maxXY[1])) + 50
+win.geometry(str(winX) + "x" + str(winY)) # set size of window
 
 # Create a canvas widget
 canvas = Canvas(win, width=500, height=300)
-canvas.pack()
-canvas.configure(scrollregion=canvas.bbox("ALL"))
+canvas.pack(fill="both", expand=True)
 
 # Add a line in canvas widget
-offsetX = winX / 2
+offsetX = winX / 2 # to get origin in center of window
 offsetY = winY / 2
-canvas.create_line(offsetX,minXY[1]+offsetX,offsetY,maxXY[1]+offsetY, fill = "green", width=2)
-canvas.create_line(minXY[0]+offsetX,offsetX,maxXY[0]+offsetY,offsetY, fill = "green", width=2)
+yAxis = scale*minXY[0]+offsetX,offsetX,scale*maxXY[0]+offsetY,offsetY # points of y-axis
+xAxis = offsetX,scale*minXY[1]+offsetX,offsetY,scale*maxXY[1]+offsetY # points of x-axis
+
+canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
+canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
+
+# ticks
+for i in range(minXY[0], maxXY[0]):
+    if(i%10 == 0 and i != 0): # ticks in interwall of 10
+        canvas.create_line(scale*i+offsetX, -2+offsetY, scale*i+offsetX, 2+offsetY, fill = "black", width=1)
+        tick = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center", width=20)
+
+
+for i in range(minXY[1], maxXY[1]):
+    if(i%10 == 0 and i != 0):
+        canvas.create_line(-2+offsetX, scale*i+offsetY, 2+offsetX, scale*i+offsetY, fill = "black", width=1)
+        tick = Label(win, text=str(i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center", width=20)
+
 
 win.mainloop()
 
