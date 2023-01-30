@@ -49,11 +49,11 @@ canvas = Canvas(win, width=winX, height=winY)
 # Add a line in canvas widget
 offsetX = (winX-100) / 2 # to get origin in center of window
 offsetY = winY / 2
-yAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of y-axis
-xAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of x-axis
+xAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of x-axis
+yAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of y-axis
 
-canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
+canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 
 # ticks
 for i in range(minXY[0], maxXY[0]):
@@ -73,12 +73,7 @@ for i in range(minXY[1], maxXY[1]):
 #canvas.create_oval((data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY, (data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY,fill='blue', width=4)
 #canvas.create_oval((data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY, (data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY,fill='blue', width=4)
 
-# Prints all dots 
-i = 0
-group_type = np.sort(list(set(data1['group']))) # Gets the group types, sorted
-#group_type2 = list(set(data2['group']))
-print('groups: ', group_type)
-size = 3 # Size of the points in the plot
+
 
 # Left click event
 def left_click(event):
@@ -88,8 +83,32 @@ def left_click(event):
     x = data[int(index)][0] # coordinates from data
     y = data[int(index)][1]
 
-    # new grid system...
-    print("clicked")
+    # highlight clicked point
+    size = 10
+    canvas.create_oval(x*scale+offsetX-size, -y*scale+offsetY+size, x*scale+offsetX+size, -y*scale+offsetY-size,fill=None, outline='red' )
+
+    # draw new origin
+    canvas.create_line(scale*minXY[0]+offsetX, offsetY-scale*y, scale*maxXY[0]+offsetX, offsetY-scale*y, fill = "gray", width=1) # create x-axis
+    canvas.create_line(offsetX+scale*x, scale*minXY[1]+offsetY, offsetX+scale*x,scale*maxXY[1]+offsetY, fill = "gray", width=1) # create y-axis
+
+    print(x,y)
+    print(data[1][0], data[1][1])
+    #calculate quadrant
+    for i in range(len(data)):
+        # left upper quadrant
+        if(data[i][0] < x and data[i][1] > y ):
+            canvas.itemconfig(object[i], fill='red') # change color to red
+        # right upper quadrant
+        if(data[i][0] > x and data[i][1] > y ): 
+            canvas.itemconfig(object[i], fill='green') # change color to green
+        # left lower quadrant
+        if(data[i][0] < x and data[i][1] < y ):
+            canvas.itemconfig(object[i], fill='orange') # change color to orange
+        # right lower quadrant
+        if(data[i][0] > x and data[i][1] < y ):
+            canvas.itemconfig(object[i], fill='pink') # change color to pink
+        # does not change color if values are equal, not in either quadrant!
+
 
 
 
@@ -117,19 +136,27 @@ def right_click(event):
 
     # remove ??
 
+
+# Prints all dots 
+i = 0
+group_type = np.sort(list(set(data1['group']))) # Gets the group types, sorted
+#group_type2 = list(set(data2['group']))
+print('groups: ', group_type)
+size = 3 # Size of the points in the plot
+object = {}
 while (i < len(data)):
 
     # Prints the first group as circles
     if(data[i][2] == group_type[0]):
-        canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=("shape"+str(i)))
+        object[i] = canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=("shape"+str(i)))
 
     # Prints the first group as squares
     if (data[i][2] == group_type[1]):
-        canvas.create_rectangle((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=("shape"+str(i)))
+        object[i] = canvas.create_rectangle((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=("shape"+str(i)))
 
     # Prints the first group as triangles
     if(data[i][2] == group_type[2]):
-        canvas.create_polygon((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, -(data[i][1])*scale+offsetY+size, fill='blue', tags=("shape"+str(i)))
+        object[i] = canvas.create_polygon((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, -(data[i][1])*scale+offsetY+size, fill='blue', tags=("shape"+str(i)))
 
     canvas.tag_bind(("shape"+str(i)), "<Button-1>", left_click) # left click interaction
     canvas.tag_bind(("shape"+str(i)), "<Button-3>", right_click)# right clivk interaction
