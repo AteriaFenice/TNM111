@@ -6,6 +6,7 @@
 import pandas as pd
 import numpy as np
 import math
+from math import *
 from tkinter import *
 from collections import Counter
 
@@ -19,46 +20,61 @@ from collections import Counter
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
-data = data1.to_numpy()# From csv to array
-print(data1)
+dataset = data2
+data = dataset.to_numpy()# From csv to array
+#print(data1)
 
 #print(data1)
 #print('\n')
 #print(data2)
 # get max and min value of column x and y
-maxXY = data1.max()
-minXY = data1.min()
+maxXY = dataset.max()
+minXY = dataset.min()
 
 # Create an instance of tkinter frame or window
 win=Tk()
 
 # Set the size of the tkinter window 
-scale = 5 # otherwise window is too small
-winX = scale * (maxXY[0]+abs(minXY[0])) + 200 # dynamically changed based on database
-winY = scale * (maxXY[1]+abs(maxXY[1])) + 50
+scale = 3 # otherwise window is too small
+winX = scale * floor((maxXY[0]+abs(minXY[0]))) + 200 # dynamically changed based on database
+winY = scale * floor((maxXY[1]+abs(maxXY[1]))) + 100
 win.geometry(str(winX) + "x" + str(winY)) # set size of window
 
 # Create a canvas widget
-canvas = Canvas(win, width=500, height=300)
+canvas = Canvas(win, width=winX, height=winY)
 canvas.pack(fill="both", expand=True)
 
+# Axes-extension
+axEx = 10
+
 # Add a line in canvas widget
-offsetX = (winX-100) / 2 # to get origin in center of window
+offsetX = (winX-150) / 2 # to get origin in center of window 
 offsetY = winY / 2
-yAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of y-axis
-xAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of x-axis
+#yAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of y-axis
+yAxis = -scale*(maxXY[0]+axEx)+offsetX, offsetY, scale*(maxXY[0]+axEx)+offsetX, offsetY # points of y-axis
+#xAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of x-axis
+xAxis = offsetX, -scale*(maxXY[1]+axEx)+offsetY, offsetX,scale*(maxXY[1]+axEx)+offsetY # points of x-axis
+print("yAxis: ", yAxis)
+print("xAxis: ", xAxis)
 
 canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
 
+print("minXY: ", floor(minXY[0]))
+
+print("maxXY: ", floor(maxXY[1]))
+
+# x range: floor(minXY[0]), floor(maxXY[0]), -int(yAxis[1]/2),int(yAxis[1]/2)
+# y range: floor(minXY[1]), floor(maxXY[1]), -int(xAxis[0]/2),int(xAxis[0]/2)
+
 # ticks
-for i in range(minXY[0], maxXY[0]):
+for i in range(-floor(maxXY[0]+axEx), floor(maxXY[0]+axEx)):
     if(i%10 == 0 and i != 0): # ticks in intervals of 10
         canvas.create_line(scale*i+offsetX, -3+offsetY, scale*i+offsetX, 3+offsetY, fill = "black", width=1)
         tick = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center")
 
 
-for i in range(minXY[1], maxXY[1]):
+for i in range(-floor(maxXY[1]+axEx), floor(maxXY[1]+axEx)):
     if(i%10 == 0 and i != 0):
         canvas.create_line(-3+offsetX, scale*i+offsetY, 3+offsetX, scale*i+offsetY, fill = "black", width=1)
         tick = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center")
@@ -71,12 +87,12 @@ for i in range(minXY[1], maxXY[1]):
 
 # Prints all dots 
 i = 0
-group_amount = Counter(data1['group']) # Count how many of each type
-group_type = np.sort(list(set(data1['group']))) # Gets the group types, sorted
+group_amount = Counter(dataset['group']) # Count how many of each type
+group_type = np.sort(list(set(dataset['group']))) # Gets the group types, sorted
 #group_type2 = list(set(data2['group']))
 print('groups: ', group_type)
 print('how many of each group: ', group_amount)
-size = 3 # Size of the points in the plot
+size = 4 # Size of the points in the plot
 
 # Left click event
 def left_click(event):
@@ -114,7 +130,6 @@ def right_click(event):
     five = np.delete(five,0) # remove clicked element
 
     # highligt 5 closest
-
     if is_on == False:
         size = 10
         for i in five:
@@ -122,9 +137,9 @@ def right_click(event):
         is_on = True
 
     else:
-        canvas.delete("highlight")
+        canvas.delete("highlight") # Removes highlight
         is_on = False
-    # remove ??
+
 
 while (i < len(data)):
 
@@ -151,7 +166,7 @@ i=0
 while (i < len(group_type)):
     shape = ['oval', 'rectangle', 'triangle']
 
-    leg = Label(win, text=str(shape[i])+" = "+str(group_type[i])).place(relx=0.95, rely=0.1+0.05*i, anchor="ne")
+    leg = Label(win, text=str(shape[i])+" : "+str(group_type[i])).place(relx=0.95, rely=0.1+0.05*i, anchor="ne")
 
     i = i+1
 
