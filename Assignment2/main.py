@@ -36,9 +36,12 @@ win=Tk()
 
 # Set the size of the tkinter window 
 scale = 3 # otherwise window is too small
-winX = scale * floor((maxXY[0]+abs(minXY[0]))) + 200 # dynamically changed based on database
+winX = scale * floor((maxXY[0]+abs(maxXY[0]))) + 200 # dynamically changed based on database
 winY = scale * floor((maxXY[1]+abs(maxXY[1]))) + 100
 win.geometry(str(winX) + "x" + str(winY)) # set size of window
+
+print("windowX: ", winX)
+print("windowY: ", winY)
 
 # Create a canvas widget
 canvas = Canvas(win, width=winX, height=winY)
@@ -87,7 +90,7 @@ for i in range(-floor(maxXY[1]+axEx), floor(maxXY[1]+axEx)):
 
 # Prints all dots 
 i = 0
-group_amount = Counter(dataset['group']) # Count how many of each type
+group_amount = np.sort(list(Counter(dataset['group']).values())) # Count how many of each type
 group_type = np.sort(list(set(dataset['group']))) # Gets the group types, sorted
 #group_type2 = list(set(data2['group']))
 print('groups: ', group_type)
@@ -164,9 +167,9 @@ while (i < len(data)):
 # LEGEND - lite skev, borde visa formerna
 i=0
 while (i < len(group_type)):
-    shape = ['oval', 'rectangle', 'triangle']
+    shape = ['circle', 'square', 'triangle']
 
-    leg = Label(win, text=str(shape[i])+" : "+str(group_type[i])).place(relx=0.95, rely=0.1+0.05*i, anchor="ne")
+    leg = Label(win, text=str(shape[i])+" : "+str(group_type[i]) + ', ' + str(group_amount[i])).place(relx=0.95, rely=0.1+0.05*i, anchor="ne")
 
     i = i+1
 
