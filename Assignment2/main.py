@@ -5,7 +5,6 @@
 # Import libraries 
 import pandas as pd
 import numpy as np
-import math
 from math import *
 from tkinter import *
 from collections import Counter
@@ -20,13 +19,10 @@ from collections import Counter
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
-dataset = data2
+dataset = data1
 data = dataset.to_numpy()# From csv to array
-#print(data1)
+print(dataset)
 
-#print(data1)
-#print('\n')
-#print(data2)
 # get max and min value of column x and y
 maxXY = dataset.max()
 minXY = dataset.min()
@@ -53,9 +49,7 @@ axEx = 10
 # Add a line in canvas widget
 offsetX = (winX-150) / 2 # to get origin in center of window 
 offsetY = winY / 2
-#yAxis = scale*minXY[0]+offsetX, offsetY, scale*maxXY[0]+offsetX, offsetY # points of y-axis
 yAxis = -scale*(maxXY[0]+axEx)+offsetX, offsetY, scale*(maxXY[0]+axEx)+offsetX, offsetY # points of y-axis
-#xAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points of x-axis
 xAxis = offsetX, -scale*(maxXY[1]+axEx)+offsetY, offsetX,scale*(maxXY[1]+axEx)+offsetY # points of x-axis
 print("yAxis: ", yAxis)
 print("xAxis: ", xAxis)
@@ -126,7 +120,7 @@ def right_click(event):
     # find 5 closest with euclidian distance
     dist = []
     for i in range(len(data)):
-        dist.append(math.sqrt(math.pow((x-data[i][0]),2)+math.pow((y-data[i][1]),2)))
+        dist.append(sqrt(pow((x-data[i][0]),2)+pow((y-data[i][1]),2)))
 
     index_list = np.argpartition(dist, 6) # find 6 smallest distances
     five = index_list[:6]
@@ -138,10 +132,12 @@ def right_click(event):
         for i in five:
             canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red',tags="highlight" )
         is_on = True
+        print("right on")
 
     else:
         canvas.delete("highlight") # Removes highlight
         is_on = False
+        print("right off")
 
 
 while (i < len(data)):
@@ -176,8 +172,4 @@ while (i < len(group_type)):
 
 win.mainloop()
 
-#df = pd.DataFrame(data1,columns = ['x','y','group'])
-#ax1 = df.plot.scatter(x='x',y='y',c='DarkBlue')
-
-#print(df)
 
