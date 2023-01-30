@@ -90,9 +90,14 @@ def left_click(event):
     print("clicked")
 
 
+is_on = False
+
 
 # Right click event
 def right_click(event):
+
+    global is_on 
+
     object_id = event.widget.find_withtag('current')[0] # get shape object id from click event
     tag = event.widget.gettags(object_id)[0] # get tag from object
     index = tag[5:] # index, remove "shape" from tag
@@ -109,10 +114,16 @@ def right_click(event):
     five = np.delete(five,0) # remove clicked element
 
     # highligt 5 closest
-    size = 10
-    for i in five:
-         canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red' )
 
+    if is_on == False:
+        size = 10
+        for i in five:
+            canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red',tags="highlight" )
+        is_on = True
+
+    else:
+        canvas.delete("highlight")
+        is_on = False
     # remove ??
 
 while (i < len(data)):
