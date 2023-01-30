@@ -16,7 +16,7 @@ data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
 dataset = data1
 data = dataset.to_numpy()# From csv to array
-print(dataset)
+#print(dataset)
 
 # get max and min value of column x and y
 maxXY = dataset.max()
@@ -30,9 +30,6 @@ scale = 3 # otherwise window is too small
 winX = scale * floor((maxXY[0]+abs(maxXY[0]))) + 200 # dynamically changed based on database
 winY = scale * floor((maxXY[1]+abs(maxXY[1]))) + 100
 win.geometry(str(winX) + "x" + str(winY)) # set size of window
-
-print("windowX: ", winX)
-print("windowY: ", winY)
 
 # Create a canvas widget
 canvas = Canvas(win, width=winX, height=winY)
@@ -64,20 +61,7 @@ for i in range(-floor(maxXY[1]+axEx), floor(maxXY[1]+axEx)):
         canvas.create_text(-15+offsetX, scale*i+offsetY, text=str(i))
 
 
-# [row][column]
-# Test
-#canvas.create_oval((data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY, (data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY,fill='blue', width=4)
-#canvas.create_oval((data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY, (data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY,fill='blue', width=4)
-
 clicked = 1
-# Prints all dots 
-i = 0
-group_amount = np.sort(list(Counter(dataset['group']).values())) # Count how many of each type
-group_type = np.sort(list(set(dataset['group']))) # Gets the group types, sorted
-#group_type2 = list(set(data2['group']))
-print('groups: ', group_type)
-print('how many of each group: ', group_amount)
-size = 4 # Size of the points in the plot
 
 # Left click event
 def left_click(event):
@@ -113,26 +97,18 @@ def left_click(event):
             if(data[i][0] > x and data[i][1] < y ):
                 canvas.itemconfig(object[i], fill='pink') # change color to pink
             # does not change color if values are equal, not in either quadrant!
-        print(clicked)
         clicked = 0
-        print(clicked)
         tempx = x
         tempy = y
-        print("clicked 1 time")
     else:
         canvas.move("move", scale*tempx, -scale* tempy)
         canvas.delete(circle)
         for i in range(len(data)):
             canvas.itemconfig(object[i], fill='blue') # change color to blue for all shapes
         clicked = 1
-        print("clicked second time")
-        return clicked
         
 
-
-
 is_on = False
-
 
 # Right click event
 def right_click(event):
@@ -154,8 +130,6 @@ def right_click(event):
     five = index_list[:6]
 
     # highligt 5 closest
-    # FIX CODE
-    
     if is_on == False:
         size = 10
         for i in five:
@@ -164,20 +138,25 @@ def right_click(event):
             else: # 5 closest
                 canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red', tags="highlight")
         is_on = True
-        print("right on")
+        #print("right on")
 
     else:
         canvas.delete("highlight") # Removes highlight
         is_on = False
-        print("right off")
-
+        #print("right off")
 
 
 # Prints all dots 
 i = 0
+group_amount = np.sort(list(Counter(dataset['group']).values())) # Count how many of each type
 group_type = np.sort(list(set(dataset['group']))) # Gets the group types, sorted
-#group_type2 = list(set(data2['group']))
-print('groups: ', group_type)
+#print('groups: ', group_type)
+#print('how many of each group: ', group_amount)
+size = 4 # Size of the points in the plot
+
+# Prints all dots 
+i = 0
+group_type = np.sort(list(set(dataset['group']))) # Gets the group types, sorted
 size = 3 # Size of the points in the plot
 object = {}
 while (i < len(data)):
@@ -199,35 +178,7 @@ while (i < len(data)):
 
     i = i+1
 
-# Legend
-legend = Canvas(win, width=50, height=100)
-
-print(len(group_type))
-
 group_amount = np.sort(list(Counter(dataset['group']).values())) # Count how many of each type
-print('how many of each group: ', group_amount)
-
-i = 0
-nextlineSpace = 20
-text_legend = ""
-
-shapes = [legend.create_oval(10,10+(nextlineSpace*(i+1)),10+size,10+(nextlineSpace*(i+1))+size,fill='blue'),
-    legend.create_oval(10,10+(nextlineSpace*(i+1)),10+size,10+(nextlineSpace*(i+1))+size,fill='blue'),
-    legend.create_oval(10,10+(nextlineSpace*(i+1)),10+size,10+(nextlineSpace*(i+1))+size,fill='blue'),
-    ]
-
-print(group_type[0] + ": " + str(group_amount[0]))
-
-while i < len(group_type):
-     shapes[i]
-     text_legend = group_type[i] + ": " + str(group_amount[i])
-     legend.create_text(30,10+(nextlineSpace*(i+1)),text=text_legend)
-     i = i+1
-
-canvas.grid(row=0,column=0)
-legend.grid(row=0,column=1)
-
-
 
 # LEGEND - lite skev, borde visa formerna
 i=0
