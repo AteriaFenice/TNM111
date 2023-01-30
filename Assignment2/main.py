@@ -10,20 +10,11 @@ from tkinter import *
 from collections import Counter
 
 # Implemenatation
-# Draw the x- and y-axis, together with ticks and tick values
-# Display a legend that shows the categorial information
-# Display categorical information of the data points by using different shapes to represent the points
-# Display the data points correctly with respect to the axes
-# Set the value range automatically based on the data vlaues presnet in the data set 
-
-def draw_circle(x0,y0,x1,y1):
-    legend.create_oval(x0,y0,x1,y1,fill='blue')
-
 
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
-dataset = data1
+dataset = data2
 data = dataset.to_numpy()# From csv to array
 print(dataset)
 
@@ -61,19 +52,17 @@ print("xAxis: ", xAxis)
 canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
 canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 
-tickX = {}
-tickY = {}
 # ticks
 for i in range(-floor(maxXY[0]+axEx), floor(maxXY[0]+axEx)):
     if(i%10 == 0 and i != 0): # ticks in intervals of 10
         canvas.create_line(scale*i+offsetX, -3+offsetY, scale*i+offsetX, 3+offsetY, fill = "black", width=1)
-        tickX[i] = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center")
+        tick = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center")
 
 
 for i in range(-floor(maxXY[1]+axEx), floor(maxXY[1]+axEx)):
     if(i%10 == 0 and i != 0):
         canvas.create_line(-3+offsetX, scale*i+offsetY, 3+offsetX, scale*i+offsetY, fill = "black", width=1)
-        tickY[i] = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center")
+        tick = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center")
 
 
 # [row][column]
@@ -167,16 +156,14 @@ def right_click(event):
 
     # highligt 5 closest
     # FIX CODE
-    size = 10
-    for i in five:
-        if i == int(index): # clicked point
-            canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='blue' )
-        else: # 5 closest
-         canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red' )
+    
     if is_on == False:
         size = 10
         for i in five:
-            canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red',tags="highlight" )
+            if i == int(index): # clicked point
+                canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='blue', tags="highlight" )
+            else: # 5 closest
+                canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red', tags="highlight")
         is_on = True
         print("right on")
 
@@ -189,7 +176,7 @@ def right_click(event):
 
 # Prints all dots 
 i = 0
-group_type = np.sort(list(set(data1['group']))) # Gets the group types, sorted
+group_type = np.sort(list(set(dataset['group']))) # Gets the group types, sorted
 #group_type2 = list(set(data2['group']))
 print('groups: ', group_type)
 size = 3 # Size of the points in the plot
@@ -218,7 +205,7 @@ legend = Canvas(win, width=50, height=100)
 
 print(len(group_type))
 
-group_amount = np.sort(list(Counter(data1['group']).values())) # Count how many of each type
+group_amount = np.sort(list(Counter(dataset['group']).values())) # Count how many of each type
 print('how many of each group: ', group_amount)
 
 i = 0
