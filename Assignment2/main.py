@@ -55,17 +55,19 @@ yAxis = offsetX, scale*minXY[1]+offsetY, offsetX,scale*maxXY[1]+offsetY # points
 canvas.create_line(xAxis, fill = "black", width=2) # create x-axis
 canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 
+tickX = {}
+tickY = {}
 # ticks
 for i in range(minXY[0], maxXY[0]):
     if(i%10 == 0 and i != 0): # ticks in intervals of 10
         canvas.create_line(scale*i+offsetX, -3+offsetY, scale*i+offsetX, 3+offsetY, fill = "black", width=1)
-        tick = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center")
+        tickX[i] = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center")
 
 
 for i in range(minXY[1], maxXY[1]):
     if(i%10 == 0 and i != 0):
         canvas.create_line(-3+offsetX, scale*i+offsetY, 3+offsetX, scale*i+offsetY, fill = "black", width=1)
-        tick = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center")
+        tickY[i] = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center")
 
 
 # [row][column]
@@ -73,7 +75,7 @@ for i in range(minXY[1], maxXY[1]):
 #canvas.create_oval((data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY, (data[2][0])*scale+offsetX,(data[2][1])*scale+offsetY,fill='blue', width=4)
 #canvas.create_oval((data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY, (data[3][0])*scale+offsetX,(data[3][1])*scale+offsetY,fill='blue', width=4)
 
-
+clicked = 1
 
 # Left click event
 def left_click(event):
@@ -85,31 +87,45 @@ def left_click(event):
 
     # highlight clicked point
     size = 10
-    canvas.create_oval(x*scale+offsetX-size, -y*scale+offsetY+size, x*scale+offsetX+size, -y*scale+offsetY-size,fill=None, outline='red' )
-
-    # draw new origin
-    canvas.create_line(scale*minXY[0]+offsetX, offsetY-scale*y, scale*maxXY[0]+offsetX, offsetY-scale*y, fill = "gray", width=1) # create x-axis
-    canvas.create_line(offsetX+scale*x, scale*minXY[1]+offsetY, offsetX+scale*x,scale*maxXY[1]+offsetY, fill = "gray", width=1) # create y-axis
-
-    print(x,y)
-    print(data[1][0], data[1][1])
-    #calculate quadrant
-    for i in range(len(data)):
-        # left upper quadrant
-        if(data[i][0] < x and data[i][1] > y ):
-            canvas.itemconfig(object[i], fill='red') # change color to red
-        # right upper quadrant
-        if(data[i][0] > x and data[i][1] > y ): 
-            canvas.itemconfig(object[i], fill='green') # change color to green
-        # left lower quadrant
-        if(data[i][0] < x and data[i][1] < y ):
-            canvas.itemconfig(object[i], fill='orange') # change color to orange
-        # right lower quadrant
-        if(data[i][0] > x and data[i][1] < y ):
-            canvas.itemconfig(object[i], fill='pink') # change color to pink
-        # does not change color if values are equal, not in either quadrant!
+    global clicked
+    global tempx
+    global tempy
+    global circle
 
     # remove when clicking again!
+    if clicked == 1:
+        canvas.move("move", -scale*x, scale* y)
+        circle = canvas.create_oval(offsetX-size, offsetY+size, offsetX+size, offsetY-size,fill=None, outline='red' )
+        #calculate quadrant
+        for i in range(len(data)):
+            # left upper quadrant
+            if(data[i][0] < x and data[i][1] > y ):
+                canvas.itemconfig(object[i], fill='red') # change color to red
+            # right upper quadrant
+            if(data[i][0] > x and data[i][1] > y ): 
+                canvas.itemconfig(object[i], fill='green') # change color to green
+            # left lower quadrant
+            if(data[i][0] < x and data[i][1] < y ):
+                canvas.itemconfig(object[i], fill='orange') # change color to orange
+            # right lower quadrant
+            if(data[i][0] > x and data[i][1] < y ):
+                canvas.itemconfig(object[i], fill='pink') # change color to pink
+            # does not change color if values are equal, not in either quadrant!
+        print(clicked)
+        clicked = 0
+        print(clicked)
+        tempx = x
+        tempy = y
+        print("clicked 1 time")
+    else:
+        canvas.move("move", scale*tempx, -scale* tempy)
+        canvas.delete(circle)
+        for i in range(len(data)):
+            canvas.itemconfig(object[i], fill='blue') # change color to blue for all shapes
+        clicked = 1
+        print("clicked second time")
+        return clicked
+        
 
 
 
@@ -152,15 +168,15 @@ while (i < len(data)):
 
     # Prints the first group as circles
     if(data[i][2] == group_type[0]):
-        object[i] = canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=("shape"+str(i)))
+        object[i] = canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=(("shape"+str(i)), "move"))
 
     # Prints the first group as squares
     if (data[i][2] == group_type[1]):
-        object[i] = canvas.create_rectangle((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=("shape"+str(i)))
+        object[i] = canvas.create_rectangle((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill='blue', tags=(("shape"+str(i)), "move"))
 
     # Prints the first group as triangles
     if(data[i][2] == group_type[2]):
-        object[i] = canvas.create_polygon((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, -(data[i][1])*scale+offsetY+size, fill='blue', tags=("shape"+str(i)))
+        object[i] = canvas.create_polygon((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, -(data[i][1])*scale+offsetY+size, fill='blue', tags=(("shape"+str(i)), "move"))
 
     canvas.tag_bind(("shape"+str(i)), "<Button-1>", left_click) # left click interaction
     canvas.tag_bind(("shape"+str(i)), "<Button-3>", right_click)# right clivk interaction
