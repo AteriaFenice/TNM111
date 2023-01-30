@@ -109,6 +109,8 @@ def left_click(event):
             canvas.itemconfig(object[i], fill='pink') # change color to pink
         # does not change color if values are equal, not in either quadrant!
 
+    # remove when clicking again!
+
 
 
 
@@ -127,11 +129,13 @@ def right_click(event):
 
     index_list = np.argpartition(dist, 6) # find 6 smallest distances
     five = index_list[:6]
-    five = np.delete(five,0) # remove clicked element
 
     # highligt 5 closest
     size = 10
     for i in five:
+        if i == int(index): # clicked point
+            canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='blue' )
+        else: # 5 closest
          canvas.create_oval((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY+size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,fill=None, outline='red' )
 
     # remove ??
