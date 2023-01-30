@@ -14,7 +14,7 @@ from collections import Counter
 data1 = pd.read_csv("data1.csv",names=['x','y','group'])
 data2 = pd.read_csv("data2.csv",names=['x','y','group'])
 
-dataset = data2
+dataset = data1
 data = dataset.to_numpy()# From csv to array
 print(dataset)
 
@@ -56,13 +56,12 @@ canvas.create_line(yAxis, fill = "black", width=2) # create y-axis
 for i in range(-floor(maxXY[0]+axEx), floor(maxXY[0]+axEx)):
     if(i%10 == 0 and i != 0): # ticks in intervals of 10
         canvas.create_line(scale*i+offsetX, -3+offsetY, scale*i+offsetX, 3+offsetY, fill = "black", width=1)
-        tick = Label(win, text=str(i)).place(x=scale*i+offsetX, y=15+offsetY, anchor="center")
-
+        canvas.create_text(scale*i+offsetX, 15+offsetY, text=str(i))
 
 for i in range(-floor(maxXY[1]+axEx), floor(maxXY[1]+axEx)):
     if(i%10 == 0 and i != 0):
         canvas.create_line(-3+offsetX, scale*i+offsetY, 3+offsetX, scale*i+offsetY, fill = "black", width=1)
-        tick = Label(win, text=str(-i)).place(x=-15+offsetX, y=scale*i+offsetY, anchor="center")
+        canvas.create_text(-15+offsetX, scale*i+offsetY, text=str(i))
 
 
 # [row][column]
@@ -193,7 +192,7 @@ while (i < len(data)):
 
     # Prints the first group as triangles
     if(data[i][2] == group_type[2]):
-        object[i] = canvas.create_polygon((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, -(data[i][1])*scale+offsetY+size, fill='blue', tags=(("shape"+str(i)), "move"))
+        object[i] = canvas.create_polygon((data[i][0])*scale+offsetX-size, -(data[i][1])*scale+offsetY-size, (data[i][0])*scale+offsetX+size, -(data[i][1])*scale+offsetY-size,  (data[i][0])*scale+offsetX, -(data[i][1])*scale+offsetY+size, fill='blue', tags=(("shape"+str(i)), "move"), outline='black')
 
     canvas.tag_bind(("shape"+str(i)), "<Button-1>", left_click) # left click interaction
     canvas.tag_bind(("shape"+str(i)), "<Button-3>", right_click)# right clivk interaction
