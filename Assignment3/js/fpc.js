@@ -47,18 +47,29 @@ function focusPlusContext(data) {
      * Task 1 - Parse date with timeParse to year-month-day
      */
 
+    var parseDate = d3.timeParse("%Y-%m-%d");
+
     /**
      * Task 2 - Define scales and axes for scatterplot
      */
+    xScale = d3.scaleTime().range([0, width]);
+    yScale = d3.scaleLinear().range([0, height]);
+    xAxis = d3.axisBottom(xScale);
+    yAxis = d3.axisLeft(yScale);
 
     /**
      * Task 3 - Define scales and axes for context (Navigation through the data)
      */
+    navXScale = d3.scaleTime(). range([0,width]);
+    navYScale = d3.scaleLinear().range([0, height2]);
+    navXAxis = d3.axisBottom(navXScale);
+
 
     /**
      * Task 4 - Define the brush for the context graph (Navigation)
      */
 
+    var brush = d3.brushX().extent([width, height2]).on();
 
     //Setting scale parameters
     var maxDate = d3.max(data.features, function (d) { return parseDate(d.properties.Date) });
@@ -73,12 +84,16 @@ function focusPlusContext(data) {
      * Task 5 - Set the axes scales, both for focus and context.
      */
 
+    xScale.domain([minDate, maxDate]);
+    yScale.domain([minMag, maxMag]);
+    navXScale.domain([minDate, maxDate]);
+    navYScale.domain([minMag, maxMag]);
 
     //<---------------------------------------------------------------------------------------------------->
-
     /**
     * 1. Rendering the context chart
     */
+    
 
     //Append g tag for plotting the dots and axes
     var dots = context.append("g");
@@ -90,7 +105,7 @@ function focusPlusContext(data) {
     context.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height2 + ")")
-        //here..
+        .call(navXAxis);
 
     /**
      * Task 7 - Plot the small dots on the context graph.
