@@ -52,24 +52,38 @@ function focusPlusContext(data) {
     /**
      * Task 2 - Define scales and axes for scatterplot
      */
-    xScale = d3.scaleTime().range([0, width]);
-    yScale = d3.scaleLinear().range([0, height]);
-    xAxis = d3.axisBottom(xScale);
-    yAxis = d3.axisLeft(yScale);
+    xScale = d3.scaleTime()
+        .range([0, width]);
+
+    yScale = d3.scaleLinear()
+        .range([0, height]);
+        
+    xAxis = d3.axisBottom()
+        .scale(xScale);
+
+    yAxis = d3.axisLeft()
+        .scale(yScale);
 
     /**
      * Task 3 - Define scales and axes for context (Navigation through the data)
      */
-    navXScale = d3.scaleTime(). range([0,width]);
-    navYScale = d3.scaleLinear().range([0, height2]);
-    navXAxis = d3.axisBottom(navXScale);
+    navXScale = d3.scaleTime()
+        .range([0, width]);
+
+    navYScale = d3.scaleLinear()
+        .range([0, height2]);
+        
+    navXAxis = d3.axisBottom()
+        .scale(navXScale);
 
 
     /**
      * Task 4 - Define the brush for the context graph (Navigation)
      */
 
-    var brush = d3.brushX().extent([width, height2]).on();
+    var brush = d3.brushX()
+        .extent([0, 0], [width, height2])
+        .on("brush end", brushed);
 
     //Setting scale parameters
     var maxDate = d3.max(data.features, function (d) { return parseDate(d.properties.Date) });
@@ -85,7 +99,7 @@ function focusPlusContext(data) {
      */
 
     xScale.domain([minDate, maxDate]);
-    yScale.domain([minMag, maxMag]);
+    yScale.domain([maxMag, minMag]); // ?
     navXScale.domain([minDate, maxDate]);
     navYScale.domain([minMag, maxMag]);
 
@@ -105,13 +119,17 @@ function focusPlusContext(data) {
     context.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height2 + ")")
-        .call(navXAxis);
+        .call(navXAxis); // here...
 
     /**
      * Task 7 - Plot the small dots on the context graph.
      */
     small_points = dots.selectAll("dot")
         //here...
+        .data(data.features)
+        .enter()
+        .append("circle")
+        .attr('class', 'dotContext')
         .filter(function (d) { return d.properties.EQ_PRIMARY != null })
         .attr("cx", function (d) {
             return navXScale(parseDate(d.properties.Date));
@@ -124,6 +142,9 @@ function focusPlusContext(data) {
       * Task 8 - Call plot function.
       * plot(points,nr,nr) try to use different numbers for the scaling.
       */
+        
+     var points = new Points();
+     points.plot(small_points,1,2); // The larger values in scaling the smaller the dots
 
 
     //<---------------------------------------------------------------------------------------------------->
@@ -141,9 +162,13 @@ function focusPlusContext(data) {
      */
     focus.append("g")
     //here..
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+        //here..
     focus.append("g")
-    //here..
-
+        .attr("class", "axis axis--y")
+        .call(yAxis);
     //Add y axis label to the scatter plot
     d3.select(".legend")
         .style('left', "170px")
@@ -161,8 +186,13 @@ function focusPlusContext(data) {
     /**
      * Task 11 - Plot the dots on the focus graph.
      */
+    //here..
     selected_dots = dots.selectAll("dot")
-        //here..
+        .data(data.features)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("opacity", 0.65) // ?
         .filter(function (d) { return d.properties.EQ_PRIMARY != null })
         .attr("cx", function (d) {
             return xScale(parseDate(d.properties.Date));
@@ -175,7 +205,8 @@ function focusPlusContext(data) {
      * Task 12 - Call plot function
      * plot(points,nr,nr) no need to send any integers!
      */
-
+    //var points = new Points();
+    points.plot(selected_dots);
     //<---------------------------------------------------------------------------------------------------->
 
     //Mouseover function
@@ -191,6 +222,8 @@ function focusPlusContext(data) {
             /**
              * Task 13 - Update information in the "tooltip" by calling the tooltip function.
              */
+
+            points.tooltip(d);
 
 
             //Rescale the dots onhover
@@ -249,6 +282,10 @@ function focusPlusContext(data) {
      */
 
     //here..
+    context.append("g")
+        .attr("class", "brush")
+        .call(brushed)
+        .call(brush.move, xScale.range()); // ?
 
     //<---------------------------------------------------------------------------------------------------->
 
@@ -280,7 +317,7 @@ function focusPlusContext(data) {
             /**
              * Remove comment for updating dots on the map.
              */
-            //curr_points_view = world_map.change_map_points(curr_view_erth)
+            curr_points_view = world_map.change_map_points(curr_view_erth)
         }
     }
 
