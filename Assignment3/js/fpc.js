@@ -56,7 +56,7 @@ function focusPlusContext(data) {
         .range([0, width]);
 
     yScale = d3.scaleLinear()
-        .range([0, height]);
+        .range([height, 0]);
         
     xAxis = d3.axisBottom()
         .scale(xScale);
@@ -71,7 +71,7 @@ function focusPlusContext(data) {
         .range([0, width]);
 
     navYScale = d3.scaleLinear()
-        .range([0, height2]);
+        .range([height2, 0]);
         
     navXAxis = d3.axisBottom()
         .scale(navXScale);
@@ -82,7 +82,7 @@ function focusPlusContext(data) {
      */
 
     var brush = d3.brushX()
-        .extent([0, 0], [width, height2])
+        .extent([[0, 0], [width, height2]])
         .on("brush end", brushed);
 
     //Setting scale parameters
@@ -98,10 +98,10 @@ function focusPlusContext(data) {
      * Task 5 - Set the axes scales, both for focus and context.
      */
 
-    xScale.domain([minDate, maxDate]);
-    yScale.domain([maxMag, minMag]); // ?
-    navXScale.domain([minDate, maxDate]);
-    navYScale.domain([minMag, maxMag]);
+    xScale.domain([minDate, maxDate_plus]);
+    yScale.domain([0, maxMag+1]); //To show all values cause if you only have min and max some dots will be on the line
+    navXScale.domain(xScale.domain());
+    navYScale.domain(yScale.domain());
 
     //<---------------------------------------------------------------------------------------------------->
     /**
@@ -125,7 +125,6 @@ function focusPlusContext(data) {
      * Task 7 - Plot the small dots on the context graph.
      */
     small_points = dots.selectAll("dot")
-        //here...
         .data(data.features)
         .enter()
         .append("circle")
@@ -161,11 +160,9 @@ function focusPlusContext(data) {
      * Task 10 - Call x and y axis
      */
     focus.append("g")
-    //here..
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
-        //here..
     focus.append("g")
         .attr("class", "axis axis--y")
         .call(yAxis);
@@ -192,7 +189,7 @@ function focusPlusContext(data) {
         .enter()
         .append("circle")
         .attr("class", "dot")
-        .attr("opacity", 0.65) // ?
+        .attr("opacity", 0.7) // ?
         .filter(function (d) { return d.properties.EQ_PRIMARY != null })
         .attr("cx", function (d) {
             return xScale(parseDate(d.properties.Date));
@@ -284,7 +281,7 @@ function focusPlusContext(data) {
     //here..
     context.append("g")
         .attr("class", "brush")
-        .call(brushed)
+        .call(brush)
         .call(brush.move, xScale.range()); // ?
 
     //<---------------------------------------------------------------------------------------------------->

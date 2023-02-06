@@ -29,7 +29,7 @@ function worldMap(data) {
      */
 
     var svg_map = d3.select(leaflet_map.getPanes().overlayPane)
-        .append("svg")
+        .append("svg");
 
     var g = svg_map.append("g")
         .attr("class", "leaflet-zoom-hide");
@@ -87,7 +87,7 @@ function worldMap(data) {
      * Task 20 - Call the plot function with feature variable
      * not integers needed.
      */
-
+    var points = new Points();
     points.plot(feature);
 
     //Redraw the dots each time we interact with the map
