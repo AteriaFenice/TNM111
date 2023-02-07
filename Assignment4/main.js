@@ -5,13 +5,15 @@ fetch(url)
     .then(res => res.json())
     //.then(data => console.log(data))
     .then(data => {
-        var width = 800, height = 600
+        var width = 1000, height = 800
 
         let nodes = data.nodes
         let links = data.links
+        //let colour = data.colour
+        //console.log(colour)
         
         var simulation = d3.forceSimulation(nodes)
-            .force('charge', d3.forceManyBody().strength(-100))
+            .force('charge', d3.forceManyBody().strength(-70))
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force('link', d3.forceLink().links(links))
             .on('tick', ticked);
@@ -42,6 +44,9 @@ fetch(url)
                 .join('text')
                 .text(function(d){
                     return d.name
+                })
+                .style('fill', function(d) {
+                    return d.colour;
                 })
                 .attr('x', function(d) {
                     return d.x
