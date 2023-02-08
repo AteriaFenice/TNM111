@@ -1,5 +1,5 @@
 var url = "./starwars-interactions/starwars-full-interactions-allCharacters.json";
-
+var url2 = "./starwars-interactions\starwars-episode-1-interactions-allCharacters.json";
 
 fetch(url)
     .then(res => res.json())
@@ -34,6 +34,15 @@ fetch(url)
                 })
                 .attr('y2', function(d) {
                     return d.target.y
+                })
+                .on('mouseover', function(d){
+                    d3.select(".infoLink .source").text(d['source'].name);
+                    d3.select(".infoLink .target").text(d['target'].name);
+                    d3.select(".infoLink .value").text(d['value']);
+                    d3.select(".infoLink").style('visibility', 'visible');
+                })
+                .on('mouseout', function(){
+                    d3.select(".infoLink").style('visibility', 'hidden');
                 });
         }
         
@@ -53,15 +62,16 @@ fetch(url)
                 .attr('cy', function(d) {
                     return d.y
                 })
-                .on('mouseover', function(d,i){
+                .on('mouseover', function(d){
                     d3.select(".info .name").text(d['name']);
+                    d3.select(".info .value").text(d['value']);
                     d3.select(".info").style('visibility', 'visible');
                     d3.select(this)
                         .transition()
                         .duration(50)
                         .attr('r', 10);
                 })
-                .on('mouseout', function(d,i){
+                .on('mouseout', function(){
                     d3.select(".info").style('visibility', 'hidden');
                     d3.select(this)
                         .transition()

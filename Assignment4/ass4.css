@@ -18,4 +18,8 @@ circle {
     text-anchor: middle;
     font-family: "Helvetica Neue", Helvetica, sans-serif;
   }
-  
+  .infoLink{
+    text-align: center;
+    text-anchor: middle;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+  }
