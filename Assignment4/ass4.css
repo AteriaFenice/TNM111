@@ -12,4 +12,10 @@ circle {
     font-size: 10px;
     /*font-weight: bold;*/
   }
+
+  .info{
+    text-align: center;
+    text-anchor: middle;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+  }
   
