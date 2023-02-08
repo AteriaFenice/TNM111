@@ -35,14 +35,22 @@ fetch(url)
                 .attr('y2', function(d) {
                     return d.target.y
                 })
+                .style('stroke', '#ededed', )
+                .style('stroke-width', '1px')
                 .on('mouseover', function(d){
                     d3.select(".infoLink .source").text(d['source'].name);
                     d3.select(".infoLink .target").text(d['target'].name);
                     d3.select(".infoLink .value").text(d['value']);
                     d3.select(".infoLink").style('visibility', 'visible');
+                    d3.select(this)
+                        .style('stroke', '#d3d3d3', )
+                        .style('stroke-width', '3px');
                 })
                 .on('mouseout', function(){
                     d3.select(".infoLink").style('visibility', 'hidden');
+                    d3.select(this)
+                    .style('stroke', '#ededed', )
+                    .style('stroke-width', '1px');
                 });
         }
         
