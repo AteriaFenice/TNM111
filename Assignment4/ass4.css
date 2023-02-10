@@ -1,25 +1,62 @@
+/* ---- Title ---- */ 
+#title {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 15px;
+  text-anchor: middle;
+  text-align: center;
+}
+
+/* ---- Plots ---- */
+#plot1 {
+  /*box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); /*remove later, jsut to see how big they are*/ 
+  width: 50%;
+  height: 700px;
+  float: left;
+}
+
+#plot2 {
+  /*box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); /*remove later, jsut to see how big they are*/ 
+  width: 50%;
+  height: 700px;
+  float: left;
+}
 
 circle {
-    fill: cadetblue;
-  }
-  line {
-    stroke: #ccc;
-  }
-  text {
-    text-anchor: middle;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
-    fill: #666;
-    font-size: 10px;
-    /*font-weight: bold;*/
-  }
+  fill: cadetblue;
+}
 
-  .info{
-    text-align: center;
-    text-anchor: middle;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
-  }
-  .infoLink{
-    text-align: center;
-    text-anchor: middle;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
-  }
+line {
+stroke: #ccc;
+}
+
+text {
+text-anchor: middle;
+font-family: "Helvetica Neue", Helvetica, sans-serif;
+fill: #666;
+font-size: 10px;
+/*font-weight: bold;*/
+}
+
+.info{
+text-align: center;
+text-anchor: middle;
+font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.infoLink{
+  text-align: center;
+  text-anchor: middle;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+
+/* ---- Control Panel ---- */
+.control_panel {
+  width: 50%;
+  height: 100%;
+  float: left;
+  margin-right:3%;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
