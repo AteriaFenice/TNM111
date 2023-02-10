@@ -1,5 +1,5 @@
 var url = "./starwars-interactions/starwars-full-interactions-allCharacters.json";
-
+var url2 = "./starwars-interactions\starwars-episode-1-interactions-allCharacters.json";
 
 fetch(url)
     .then(res => res.json())
@@ -31,7 +31,7 @@ fetch(url)
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force('link', d3.forceLink().links(links2))
             .on('tick', ticked);
-
+            
         // Links
         function updateLinks() {
             var u = d3.select('.links1')
@@ -68,29 +68,59 @@ fetch(url)
                 })
                 .attr('y2', function(d) {
                     return d.target.y
+                })
+                .style('stroke', '#ededed', )
+                .style('stroke-width', '1px')
+                .on('mouseover', function(d){
+                    d3.select(".infoLink .source").text(d['source'].name);
+                    d3.select(".infoLink .target").text(d['target'].name);
+                    d3.select(".infoLink .value").text(d['value']);
+                    d3.select(".infoLink").style('visibility', 'visible');
+                    d3.select(this)
+                        .style('stroke', '#d3d3d3', )
+                        .style('stroke-width', '3px');
+                })
+                .on('mouseout', function(){
+                    d3.select(".infoLink").style('visibility', 'hidden');
+                    d3.select(this)
+                    .style('stroke', '#ededed', )
+                    .style('stroke-width', '1px');
                 });
         }
         
+        // Nodes
         function updateNodes() {
             var u = d3.select('.nodes1')
                 .selectAll('text')
                 .data(nodes)
-                .join('text')
-                .text(function(d){
-                    return d.name
-                })
+                .join('circle')
+                .attr('r', 5)
                 .style('fill', function(d) {
                     return d.colour;
                 })
-                .attr('x', function(d) {
+                .attr('cx', function(d) {
                     return d.x
                 })
-                .attr('y', function(d) {
+                .attr('cy', function(d) {
                     return d.y
                 })
-                .attr('dy', function(d) {
-                    return 5
+                .on('mouseover', function(d){
+                    d3.select(".info .name").text(d['name']);
+                    d3.select(".info .value").text(d['value']);
+                    d3.select(".info").style('visibility', 'visible');
+                    d3.select(this)
+                        .transition()
+                        .duration(50)
+                        .attr('r', 10);
+                })
+                .on('mouseout', function(){
+                    d3.select(".info").style('visibility', 'hidden');
+                    d3.select(this)
+                        .transition()
+                        .duration(50)
+                        .attr('r', 5);
                 });
+
         }
 
         function updateNodes2() {
@@ -121,7 +151,6 @@ fetch(url)
             updateLinks2()
             updateNodes2()
         }
-
     })
 
 

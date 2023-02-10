@@ -43,6 +43,13 @@ text-anchor: middle;
 font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
+.infoLink{
+  text-align: center;
+  text-anchor: middle;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+
 /* ---- Control Panel ---- */
 .control_panel {
   width: 50%;
@@ -53,4 +60,3 @@ font-family: "Helvetica Neue", Helvetica, sans-serif;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
-  
