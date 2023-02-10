@@ -1,15 +1,33 @@
-
 circle {
     fill: cadetblue;
-  }
-  line {
-    stroke: #ccc;
-  }
-  text {
-    text-anchor: middle;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
-    fill: #666;
-    font-size: 10px;
-    /*font-weight: bold;*/
-  }
+}
+
+line {
+  stroke: #ccc;
+}
+
+text {
+  text-anchor: middle;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  fill: #666;
+  font-size: 10px;
+  /*font-weight: bold;*/
+}
+
+.info{
+  text-align: center;
+  text-anchor: middle;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+
+/* ---- Control Panel ---- */
+.control_panel {
+  width: 20%;
+  height: 100%;
+  float: right;
+  margin-right:3%;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
   
