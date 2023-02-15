@@ -23,3 +23,27 @@ circle {
     text-anchor: middle;
     font-family: "Helvetica Neue", Helvetica, sans-serif;
   }
+
+  /* for slider */
+  rect.overlay {
+    stroke: black;
+  }
+  
+  rect.selection {
+    stroke: none;
+    fill: steelblue;
+    fill-opacity: 0.6;
+  }
+  
+  #labelleft, #labelright {
+    dominant-baseline: hanging;
+    font-size: 12px;
+  }
+  
+  #labelleft {
+    text-anchor: end;
+  }
+  
+  #labelright {
+    text-anchor: start;
+  }
