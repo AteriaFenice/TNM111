@@ -8,29 +8,29 @@ async function run(url,nr){
     .then((res) => res.json())
     //.then(data => console.log(data))
     .then(data => {
-        var width = 600, height = 800
+        var width = 600, height = 500
     
         //let data2 = url1;
 
         // Debug
-        console.log(data)
+        //console.log(data)
         //console.log(data2)
 
-        let nodes1 = data.nodes
-        let links1 = data.links
+        let nodes = data.nodes
+        let links = data.links
         
         // Node link diagram
-        var simulation = d3.forceSimulation(nodes1)
-            .force('charge', d3.forceManyBody().strength(-50))
+        var simulation = d3.forceSimulation(nodes)
+            .force('charge', d3.forceManyBody().strength(-30))
             .force('center', d3.forceCenter(width / 2, height / 2))
-            .force('link', d3.forceLink().links(links1))
+            .force('link', d3.forceLink().links(links))
             .on('tick', ticked);
             
         // Links
         function updateLinks() {
             var u = d3.select('.links' + nr)
                 .selectAll('line')
-                .data(links1)
+                .data(links)
                 .join('line')
                 .attr('x1', function(d) {
                     return d.source.x
@@ -67,7 +67,7 @@ async function run(url,nr){
         function updateNodes() {
             var u = d3.select('.nodes' + nr)
                 .selectAll('circle')
-                .data(nodes1)
+                .data(nodes)
                 .join('circle')
                 .attr('r', 5)
                 .style('fill', function(d) {
@@ -104,12 +104,12 @@ async function run(url,nr){
         // Layout for slider
         layout = ({
             width: 400,
-            height: 300,
+            height: 620,
             margin: {
-              top: 130,
-              bottom: 135,
-              left: 40,
-              right: 40
+              top: 570,
+              bottom: 20,
+              left: 80,
+              right: 20
             }
         })
         
@@ -250,42 +250,46 @@ async function run(url,nr){
         // Set range values and call slider
         const rangeMax = Math.max.apply(Math, links.map(function(d){return d.value}))
         const rangeMin = Math.min.apply(Math, links.map(function(d){return d.value}))
-        myslider = slider(rangeMin, rangeMax, undefined, undefined)
 
-        // Update node link diagram based on slider
-        d3.select('#eventhandler')
-        .on('change', function(){
-            // change visibility of links and nodes)
-            links = data.links
-            nodes = data.nodes
-            let filteredLinks = links
-                .filter(function (d) { 
-                    linksFiltered = d.value <= myslider.getRange()[1] && d.value >= myslider.getRange()[0]; 
-                    return linksFiltered
-                });
-           // console.log(filteredLinks)
-            links = filteredLinks
-            updateLinks()
-            
-            // sources and targets of remaining links
-            linkSource = links.map(function(d){return d.source.name})
-            linkTarget = links.map(function(d){return d.target.name})
-            //console.log(linkSource, linkTarget)
+        // Only use slider on url1
+        if(nr == 1){
+            myslider = slider(rangeMin, rangeMax, undefined, undefined)
+        
+        //myslider = slider(rangeMin, rangeMax, undefined, undefined)
 
-            let filteredNodes = nodes
-                .filter(function (d) { 
-                    console.log(d.name)
-                    // om node finns som source eller target hos links ska den va kvar
-                    nodesFiltered = linkSource.includes(d.name) || linkTarget.includes(d.name)
-                    return nodesFiltered
-                })
-            console.log(filteredNodes)
-            nodes = filteredNodes
-            updateNodes()
+            // Update node link diagram based on slider
+            d3.select('#eventhandler')
+            .on('change', function(){
+                // change visibility of links and nodes)
+                links = data.links
+                nodes = data.nodes
+                let filteredLinks = links
+                    .filter(function (d) { 
+                        linksFiltered = d.value <= myslider.getRange()[1] && d.value >= myslider.getRange()[0]; 
+                        return linksFiltered
+                    });
+            // console.log(filteredLinks)
+                links = filteredLinks
+                updateLinks()
+                
+                // sources and targets of remaining links
+                linkSource = links.map(function(d){return d.source.name})
+                linkTarget = links.map(function(d){return d.target.name})
+                //console.log(linkSource, linkTarget)
+
+                let filteredNodes = nodes
+                    .filter(function (d) { 
+                        // om node finns som source eller target hos links ska den va kvar
+                        nodesFiltered = linkSource.includes(d.name) || linkTarget.includes(d.name)
+                        return nodesFiltered
+                    })
+                //console.log(filteredNodes)
+                nodes = filteredNodes
+                updateNodes()
 
 
-        });
-
+            });
+        }
 
         function ticked() {
             updateLinks()
@@ -295,8 +299,9 @@ async function run(url,nr){
 };
 
  //runs the function that runs the whole program
-run(url1,1); //graph 1
+
 run(url2,2);// graph 2
+run(url1,1); //graph 1
 
 
 
