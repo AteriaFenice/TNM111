@@ -1,29 +1,38 @@
-var url = "./starwars-interactions/starwars-full-interactions-allCharacters.json";
-var url2 = "./starwars-interactions\starwars-episode-1-interactions-allCharacters.json";
+var url1 = "./starwars-interactions/starwars-full-interactions-allCharacters.json";
+var url2 = "./starwars-interactions/starwars-episode-1-interactions-allCharacters.json";
 
-fetch(url)
-    .then(res => res.json())
+urls = [url1, url2];
+
+async function run(url,nr){
+    fetch(url)
+    .then((res) => res.json())
     //.then(data => console.log(data))
     .then(data => {
-        var width = 1000, height = 800
+        var width = 600, height = 800
+    
+        //let data2 = url1;
 
-        let nodes = data.nodes
-        let links = data.links
+        // Debug
+        console.log(data)
+        //console.log(data2)
+
+        let nodes1 = data.nodes
+        let links1 = data.links
         
         // Node link diagram
-        var simulation = d3.forceSimulation(nodes)
-            .force('charge', d3.forceManyBody().strength(-70))
+        var simulation = d3.forceSimulation(nodes1)
+            .force('charge', d3.forceManyBody().strength(-50))
             .force('center', d3.forceCenter(width / 2, height / 2))
-            .force('link', d3.forceLink().links(links))
+            .force('link', d3.forceLink().links(links1))
             .on('tick', ticked);
-        
+            
         // Links
         function updateLinks() {
-            var u = d3.select('.links')
+            var u = d3.select('.links' + nr)
                 .selectAll('line')
-                .data(links)
+                .data(links1)
                 .join('line')
-                 .attr('x1', function(d) {
+                .attr('x1', function(d) {
                     return d.source.x
                 })
                 .attr('y1', function(d) {
@@ -56,9 +65,9 @@ fetch(url)
         
         // Nodes
         function updateNodes() {
-            var u = d3.select('.nodes')
+            var u = d3.select('.nodes' + nr)
                 .selectAll('circle')
-                .data(nodes)
+                .data(nodes1)
                 .join('circle')
                 .attr('r', 5)
                 .style('fill', function(d) {
@@ -69,6 +78,9 @@ fetch(url)
                 })
                 .attr('cy', function(d) {
                     return d.y
+                })
+                .attr('dy', function(d){
+                    return 5
                 })
                 .on('mouseover', function(d){
                     d3.select(".info .name").text(d['name']);
@@ -279,8 +291,12 @@ fetch(url)
             updateLinks()
             updateNodes()
         }
-
-
     })
+};
+
+ //runs the function that runs the whole program
+run(url1,1); //graph 1
+run(url2,2);// graph 2
+
 
 
