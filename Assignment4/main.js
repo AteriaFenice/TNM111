@@ -22,7 +22,7 @@ async function run(url,nr){
         // Node link diagram
         var simulation = d3.forceSimulation(nodes1)
             .force('charge', d3.forceManyBody().strength(-50))
-            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('center', d3.forceCenter(width / 1.5, height / 2))
             .force('link', d3.forceLink().links(links1))
             .on('tick', ticked);
             
@@ -44,8 +44,9 @@ async function run(url,nr){
                 .attr('y2', function(d) {
                     return d.target.y
                 })
+                .attr("class", "link")
                 .style('stroke', '#ededed', )
-                .style('stroke-width', '1px')
+                .style('stroke-width', '2px')
                 .on('mouseover', function(d){
                     d3.select(".infoLink .source").text(d['source'].name);
                     d3.select(".infoLink .target").text(d['target'].name);
@@ -53,13 +54,14 @@ async function run(url,nr){
                     d3.select(".infoLink").style('visibility', 'visible');
                     d3.select(this)
                         .style('stroke', '#d3d3d3', )
-                        .style('stroke-width', '3px');
+                        .style('stroke-width', '5px');
+                    
                 })
                 .on('mouseout', function(){
                     d3.select(".infoLink").style('visibility', 'hidden');
                     d3.select(this)
                     .style('stroke', '#ededed', )
-                    .style('stroke-width', '1px');
+                    .style('stroke-width', '2px');
                 });
         }
         
@@ -69,7 +71,7 @@ async function run(url,nr){
                 .selectAll('circle')
                 .data(nodes1)
                 .join('circle')
-                .attr('r', 5)
+                .attr('r', 7)
                 .style('fill', function(d) {
                     return d.colour;
                 })
@@ -82,22 +84,38 @@ async function run(url,nr){
                 .attr('dy', function(d){
                     return 5
                 })
+                .attr("class", "node")
                 .on('mouseover', function(d){
                     d3.select(".info .name").text(d['name']);
                     d3.select(".info .value").text(d['value']);
                     d3.select(".info").style('visibility', 'visible');
                     d3.select(this)
                         .transition()
-                        .duration(50)
-                        .attr('r', 10);
+                        .duration(100)
+                        .attr('r', 15);
+                    var char_name = d3.select(this)._groups[0][0].__data__['name']; //Name of the character of the hovered node
+                    d3.selectAll('.node')
+                        .filter(function(d){ return d.name == char_name }) //Find the node with the same character name
+                        .transition()
+                        .duration(100)
+                        .attr('r',15); // Make it bigger
                 })
                 .on('mouseout', function(){
                     d3.select(".info").style('visibility', 'hidden');
                     d3.select(this)
                         .transition()
-                        .duration(50)
-                        .attr('r', 5);
+                        .duration(100)
+                        .attr('r', 7);
+
+                    var char_name = d3.select(this)._groups[0][0].__data__['name'];
+                    d3.selectAll('.node') 
+                        .filter(function(d){ return d.name == char_name}) 
+                        .transition()
+                        .duration(100)
+                        .attr('r',7); // Returns it to its original size
+                    
                 });
+                
 
         }
         
@@ -105,6 +123,8 @@ async function run(url,nr){
             updateLinks()
             updateNodes()
         }
+
+        //var dispatch = d3.dispatch('mymouseover')
     })
 };
 
