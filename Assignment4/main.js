@@ -6,16 +6,9 @@ urls = [url1, url2];
 async function run(url,nr){
     fetch(url)
     .then((res) => res.json())
-    //.then(data => console.log(data))
     .then(data => {
         var width = 600, height = 500
     
-        //let data2 = url1;
-
-        // Debug
-        //console.log(data)
-        //console.log(data2)
-
         let nodes = data.nodes
         let links = data.links
         
@@ -53,15 +46,29 @@ async function run(url,nr){
                     d3.select(".infoLink .value").text(d['value']);
                     d3.select(".infoLink").style('visibility', 'visible');
                     d3.select(this)
-                        .style('stroke', '#d3d3d3', )
+                        .style('stroke', '#d3d3d3',)
                         .style('stroke-width', '5px');
+                    target_name = d3.select(this)._groups[0][0].__data__['target']['name'];
+                    source_name = d3.select(this)._groups[0][0].__data__['source']['name'];
+                    d3.selectAll('.link')
+                    .filter(function(d){ return d.target.name == target_name && d.source.name == source_name; }) //Find both target and source that matches
+                    .style('stroke', '#d3d3d3',) //Change color
+                    .style('stroke-width','5px'); //Make it bigger
                     
                 })
                 .on('mouseout', function(){
                     d3.select(".infoLink").style('visibility', 'hidden');
                     d3.select(this)
                     .style('stroke', '#ededed')
-                    .style('stroke-width', '1px');
+                    .style('stroke-width', '2px');
+
+                    target_name = d3.select(this)._groups[0][0].__data__['target']['name'];
+                    source_name = d3.select(this)._groups[0][0].__data__['source']['name'];
+                    d3.selectAll('.link')
+                    .filter(function(d){ return d.target.name == target_name && d.source.name == source_name; }) 
+                    .style('stroke', '#ededed',)
+                    .style('stroke-width','2px'); 
+                    
                 });
         }
         
