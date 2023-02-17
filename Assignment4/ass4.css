@@ -1,3 +1,5 @@
+
+
 #content {
   position: relative;
 }
@@ -30,15 +32,31 @@ circle {
   fill: cadetblue;
 }
 
+.infos {
+  text-align: center;
+  text-anchor: middle;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  margin-top: 340px;
+}
+
   .info{
-    text-align: center;
-    text-anchor: middle;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    position: absolute;
+    left:0;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
   }
   .infoLink{
-    text-align: center;
-    text-anchor: middle;
-    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    position: absolute;
+    left:0;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   }
 
   /* for slider */
@@ -79,15 +97,33 @@ font-size: 10px;
 
 /* ---- Control Panel ---- */
 .control_panel {
-  width: 50%;
-  height: 100%;
+  width: 94%;
+  height: 30%;
   float: left;
   margin-right:3%;
+  margin-left:3%;
   margin-top: 500px;
-  padding-bottom: 100px;
+  margin-bottom: 3%;
+  padding-bottom: 10px;
   text-align: center;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   position: absolute;
+  z-index: -1;
 }
 
+#eventhandler{
+  z-index: 1;
+  margin-top: 500px;
+  position: relative;
+}
+
+#slidertext{
+  text-align: left;
+  padding-left: 50px;
+  margin-top: 0px;
+}
+
+#controltext{
+  margin-bottom: 5px;
+}

@@ -52,8 +52,8 @@ async function run(url,nr){
                     d3.select(".infoLink .value").text(d['value']);
                     d3.select(".infoLink").style('visibility', 'visible');
                     d3.select(this)
-                        .style('stroke', '#d3d3d3', )
-                        .style('stroke-width', '3px');
+                        .style('stroke', 'rgb(143, 70, 180)', )
+                        .style('stroke-width', '4px');
                 })
                 .on('mouseout', function(){
                     d3.select(".infoLink").style('visibility', 'hidden');
@@ -69,7 +69,7 @@ async function run(url,nr){
                 .selectAll('circle')
                 .data(nodes)
                 .join('circle')
-                .attr('r', 5)
+                .attr('r', 6)
                 .style('fill', function(d) {
                     return d.colour;
                 })
@@ -89,7 +89,7 @@ async function run(url,nr){
                     d3.select(this)
                         .transition()
                         .duration(50)
-                        .attr('r', 10);
+                        .attr('r', 15);
                 })
                 .on('mouseout', function(){
                     d3.select(".info").style('visibility', 'hidden');
@@ -97,7 +97,7 @@ async function run(url,nr){
                         .transition()
                         .duration(50)
                         .style('stroke', '#ededed')
-                        .attr('r', 5);
+                        .attr('r', 6);
                 });
         }
 
