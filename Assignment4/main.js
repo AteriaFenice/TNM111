@@ -6,16 +6,9 @@ urls = [url1, url2];
 async function run(url,nr){
     fetch(url)
     .then((res) => res.json())
-    //.then(data => console.log(data))
     .then(data => {
         var width = 600, height = 500
     
-        //let data2 = url1;
-
-        // Debug
-        //console.log(data)
-        //console.log(data2)
-
         let nodes = data.nodes
         let links = data.links
         
@@ -44,8 +37,9 @@ async function run(url,nr){
                 .attr('y2', function(d) {
                     return d.target.y
                 })
+                .attr("class", "link")
                 .style('stroke', '#ededed', )
-                .style('stroke-width', '1px')
+                .style('stroke-width', '2px')
                 .on('mouseover', function(d){
                     d3.select(".infoLink .source").text(d['source'].name);
                     d3.select(".infoLink .target").text(d['target'].name);
@@ -53,13 +47,28 @@ async function run(url,nr){
                     d3.select(".infoLink").style('visibility', 'visible');
                     d3.select(this)
                         .style('stroke', 'rgb(143, 70, 180)', )
-                        .style('stroke-width', '4px');
+                        .style('stroke-width', '5px');
+                    target_name = d3.select(this)._groups[0][0].__data__['target']['name'];
+                    source_name = d3.select(this)._groups[0][0].__data__['source']['name'];
+                    d3.selectAll('.link')
+                    .filter(function(d){ return d.target.name == target_name && d.source.name == source_name; }) //Find both target and source that matches
+                    .style('stroke', '#d3d3d3',) //Change color
+                    .style('stroke-width','5px'); //Make it bigger
+                    
                 })
                 .on('mouseout', function(){
                     d3.select(".infoLink").style('visibility', 'hidden');
                     d3.select(this)
                     .style('stroke', '#ededed')
-                    .style('stroke-width', '1px');
+                    .style('stroke-width', '2px');
+
+                    target_name = d3.select(this)._groups[0][0].__data__['target']['name'];
+                    source_name = d3.select(this)._groups[0][0].__data__['source']['name'];
+                    d3.selectAll('.link')
+                    .filter(function(d){ return d.target.name == target_name && d.source.name == source_name; }) 
+                    .style('stroke', '#ededed',)
+                    .style('stroke-width','2px'); 
+                    
                 });
         }
         
@@ -69,7 +78,7 @@ async function run(url,nr){
                 .selectAll('circle')
                 .data(nodes)
                 .join('circle')
-                .attr('r', 6)
+                .attr('r', 7)
                 .style('fill', function(d) {
                     return d.colour;
                 })
@@ -82,22 +91,36 @@ async function run(url,nr){
                 .attr('dy', function(d){
                     return 5
                 })
+                .attr("class", "node")
                 .on('mouseover', function(d){
                     d3.select(".info .name").text(d['name']);
                     d3.select(".info .value").text(d['value']);
                     d3.select(".info").style('visibility', 'visible');
                     d3.select(this)
                         .transition()
-                        .duration(50)
+                        .duration(100)
                         .attr('r', 15);
+                    var char_name = d3.select(this)._groups[0][0].__data__['name']; //Name of the character of the hovered node
+                    d3.selectAll('.node')
+                        .filter(function(d){ return d.name == char_name }) //Find the node with the same character name
+                        .transition()
+                        .duration(100)
+                        .attr('r',15); // Make it bigger
                 })
                 .on('mouseout', function(){
                     d3.select(".info").style('visibility', 'hidden');
                     d3.select(this)
                         .transition()
-                        .duration(50)
-                        .style('stroke', '#ededed')
-                        .attr('r', 6);
+                        .duration(100)
+                        .attr('r', 7);
+
+                    var char_name = d3.select(this)._groups[0][0].__data__['name'];
+                    d3.selectAll('.node') 
+                        .filter(function(d){ return d.name == char_name}) 
+                        .transition()
+                        .duration(100)
+                        .attr('r',7); // Returns it to its original size
+                    
                 });
         }
 
@@ -295,6 +318,8 @@ async function run(url,nr){
             updateLinks()
             updateNodes()
         }
+
+        //var dispatch = d3.dispatch('mymouseover')
     })
 };
 
