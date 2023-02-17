@@ -52,7 +52,7 @@ async function run(url,nr){
                     source_name = d3.select(this)._groups[0][0].__data__['source']['name'];
                     d3.selectAll('.link')
                     .filter(function(d){ return d.target.name == target_name && d.source.name == source_name; }) //Find both target and source that matches
-                    .style('stroke', '#d3d3d3',) //Change color
+                    .style('stroke', 'rgb(143, 70, 180)',) //Change color
                     .style('stroke-width','5px'); //Make it bigger
                     
                 })
@@ -126,12 +126,12 @@ async function run(url,nr){
 
         // Layout for slider
         layout = ({
-            width: 400,
+            width: 600,
             height: 620,
             margin: {
               top: 570,
               bottom: 20,
-              left: 80,
+              left: 200,
               right: 20
             }
         })
