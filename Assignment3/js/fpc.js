@@ -262,7 +262,7 @@ function focusPlusContext(data) {
                     .attr("r", function (d) {
                         if (d.properties.DEATHS == null) {
                             return 3
-                        }
+                        } 
                         else {
                             return scaleQuantRad(d.properties.DEATHS);
                         }

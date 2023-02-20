@@ -7,14 +7,14 @@ async function run(url,nr){
     fetch(url)
     .then((res) => res.json())
     .then(data => {
-        var width = 600, height = 500
+        var width = 600, height = 700
     
         let nodes = data.nodes
         let links = data.links
         
         // Node link diagram
         var simulation = d3.forceSimulation(nodes)
-            .force('charge', d3.forceManyBody().strength(-30))
+            .force('charge', d3.forceManyBody().strength(-50))
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force('link', d3.forceLink().links(links))
             .on('tick', ticked);
@@ -127,12 +127,12 @@ async function run(url,nr){
         // Layout for slider
         layout = ({
             width: 600,
-            height: 620,
+            height: 760,
             margin: {
-              top: 570,
+              top: 710,
               bottom: 20,
-              left: 200,
-              right: 20
+              left: 150,
+              right: 60
             }
         })
         
