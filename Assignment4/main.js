@@ -1,5 +1,5 @@
 var url1 = "./starwars-interactions/starwars-full-interactions-allCharacters.json";
-var url2 = "./starwars-interactions/starwars-episode-1-interactions-allCharacters.json";
+var url2 = "./starwars-interactions/starwars-episode-1-interactions-allCharacters.json"; 
 
 urls = [url1, url2];
 
@@ -204,7 +204,7 @@ async function run(url,nr){
 
                     // update view
                     svg.node().value = s.map(d => Math.round(x.invert(d)));
-                    //svg.node().dispatchEvent(new CustomEvent('input'));
+                    
                     // event for range sliders
                     let event = new Event('change');
                     eventhandler.dispatchEvent(event);
@@ -278,7 +278,6 @@ async function run(url,nr){
         if(nr == 1){
             myslider = slider(rangeMin, rangeMax, undefined, undefined)
         
-        //myslider = slider(rangeMin, rangeMax, undefined, undefined)
 
             // Update node link diagram based on slider
             d3.select('#eventhandler')
@@ -291,22 +290,18 @@ async function run(url,nr){
                         linksFiltered = d.value <= myslider.getRange()[1] && d.value >= myslider.getRange()[0]; 
                         return linksFiltered
                     });
-            // console.log(filteredLinks)
                 links = filteredLinks
                 updateLinks()
                 
                 // sources and targets of remaining links
                 linkSource = links.map(function(d){return d.source.name})
                 linkTarget = links.map(function(d){return d.target.name})
-                //console.log(linkSource, linkTarget)
 
                 let filteredNodes = nodes
                     .filter(function (d) { 
-                        // om node finns som source eller target hos links ska den va kvar
                         nodesFiltered = linkSource.includes(d.name) || linkTarget.includes(d.name)
                         return nodesFiltered
                     })
-                //console.log(filteredNodes)
                 nodes = filteredNodes
                 updateNodes()
 
@@ -319,12 +314,10 @@ async function run(url,nr){
             updateNodes()
         }
 
-        //var dispatch = d3.dispatch('mymouseover')
     })
 };
 
  //runs the function that runs the whole program
-
 run(url2,2);// graph 2
 run(url1,1); //graph 1
 

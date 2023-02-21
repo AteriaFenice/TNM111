@@ -1,8 +1,9 @@
 
-
 #content {
   position: relative;
 }
+
+/* ---- Title ---- */ 
 
 .episodeAll{
   font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -17,14 +18,12 @@
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   font-size: 15px;
   position: absolute;
-  margin-right: 22%;
+  margin-right: 20%;
   width: 100px;
   text-align: right;
   right:0;
 }
 
-
-/* ---- Title ---- */ 
 #title {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   font-size: 30px;
@@ -35,7 +34,6 @@
 
 /* ---- Plots ---- */
 #plot1 {
-  /*box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); /*remove later, jsut to see how big they are*/ 
   width: 50%;
   height: 800px;
   float: left;
@@ -43,7 +41,6 @@
 }
 
 #plot2 {
-  /*box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); /*remove later, jsut to see how big they are*/ 
   width: 43%;
   height: 700px;
   float: left;
@@ -82,7 +79,7 @@ circle {
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 
-/* for slider */
+/* ---- For slider ---- */
 rect.overlay {
   stroke: rgb(0, 0, 0);
 }
@@ -94,7 +91,6 @@ rect.selection {
 }
 
 #labelleft, #labelright {
-  dominant-baseline: hanging;
   font-size: 12px;
 }
 
@@ -115,7 +111,6 @@ text-anchor: middle;
 font-family: "Helvetica Neue", Helvetica, sans-serif;
 fill: #666;
 font-size: 10px;
-/*font-weight: bold;*/
 }
 
 /* ---- Control Panel ---- */
@@ -138,12 +133,6 @@ font-size: 10px;
   z-index: 1;
   margin-top: 500px;
   position: relative;
-}
-
-#slidertext{
-  text-align: left;
-  padding-left: 200px;
-  margin-top: 0px;
 }
 
 #controltext{
